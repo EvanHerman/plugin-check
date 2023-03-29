@@ -1,9 +1,17 @@
 <?php
 /**
  * Zip a specified directory.
+ *
+ * @package WP_Plugin_Check
+ * @since 1.0.0
  */
 final class WP_Plugin_Check_Zip_Plugin {
 
+	/**
+	 * Class constructor.
+	 *
+	 * @since 1.0.0
+	 */
 	public function __construct( $source, $destination, $include_dir = false, $exclusions = array() ) {
 
 		/**
@@ -52,6 +60,16 @@ final class WP_Plugin_Check_Zip_Plugin {
 
 	}
 
+	/**
+	 * ZIP a specific directory.
+	 *
+	 * @param string $source      The source directory to zip.
+	 * @param string $destination The destination of the zip file.
+	 * @param bool   $include_dir Whether to include the source directory in the zip file.
+	 * @param array  $exclusions  List of files to exclude from the zip file.
+	 *
+	 * @since 1.0.0
+	 */
 	public function zip_plugin( $source, $destination, $include_dir = false, $exclusions = array() ) {
 
 		// Remove existing archive
@@ -79,7 +97,10 @@ final class WP_Plugin_Check_Zip_Plugin {
 
 		if ( is_dir( $source ) === true ) {
 
-			$files = new RecursiveIteratorIterator( new RecursiveDirectoryIterator( $source ), RecursiveIteratorIterator::SELF_FIRST );
+			$files = new RecursiveIteratorIterator(
+				new RecursiveDirectoryIterator( $source ),
+				RecursiveIteratorIterator::SELF_FIRST
+			);
 
 			if ( $include_dir ) {
 
@@ -100,7 +121,7 @@ final class WP_Plugin_Check_Zip_Plugin {
 
 			foreach ( $files as $file ) {
 
-				// Ignore "." and ".." folders
+				// Ignore "." and ".." folders.
 				$file = str_replace( '\\', '/', $file );
 
 				if( in_array( substr( $file, strrpos( $file, '/' ) +1 ), array( '.', '..' ) ) ) {
@@ -109,9 +130,9 @@ final class WP_Plugin_Check_Zip_Plugin {
 
 				}
 
-				// Add Exclusion
+				// Add Exclusion.
 				if ( ! empty( $exclusions ) ) {
-					if ( in_array( str_replace( $source . '/', '', $file, true ), $exclusions ) ) {
+					if ( in_array( str_replace( $source . '/', '', $file ), $exclusions, true ) ) {
 						continue;
 					}
 				}

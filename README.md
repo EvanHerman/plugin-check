@@ -1,9 +1,13 @@
 # WordPress Plugin Check
-Scan your WordPress plugin for common errors before submitting it to WordPress.org for review
+Scan your WordPress plugin for common errors before submitting it to WordPress.org for review.
+
+The Plugin Check plugin can be used to check a plugin locally on a test site during development, or it can be used to check a plugin `.zip` from a remote URL.
 
 
 ### Intentions
-This plugins intention is to minimize the number of common errors developers encounter when submitting plugins to WordPress.org for review. When submitting a plugin for admission into [WordPress.org](https://www.wordpress.org/plugins) there are a number of [guidelines](https://developer.wordpress.org/plugins/wordpress-org/detailed-plugin-guidelines/) that must be followed, and many developers miss steps or checks that prolong the review process over multiple days.
+This plugins intention is to minimize the common pitfalls and common errors developers encounter when submitting plugins to WordPress.org for review.
+
+When submitting a plugin for admission into [WordPress.org](https://www.wordpress.org/plugins) there are a number of [guidelines](https://developer.wordpress.org/plugins/wordpress-org/detailed-plugin-guidelines/) that must be followed, and many developers miss steps or checks that prolong the review process over multiple days.
 
 Developing a plugin in tandem with Plugin Check will allow developers to periodically check their code for missteps or invalid code that would prevent a plugin from being accepted into the [WordPress.org](https://www.wordpress.org/plugins) repository.
 
