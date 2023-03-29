@@ -27,7 +27,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release delete --cleanup-tag --yes
+          gh release delete $RELEASE_VERSION --cleanup-tag --yes
 
       - name: Create release
         env:
