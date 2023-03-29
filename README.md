@@ -3,9 +3,11 @@ Scan your WordPress plugin for common errors before submitting it to WordPress.o
 
 
 ### Intentions
-This plugins intention is to minimize the number of common errors developers encounter when submitting plugins to WordPress.org for review. When submitting a plugin for admission into [WordPress.org](https://www.wordpress.org/plugins) there are a number of [guidelines](https://developer.wordpress.org/plugins/wordpress-org/detailed-plugin-guidelines/) that must be followed, and many developers miss steps or checks that prolong the review process. Developing a plugin in tandem with Plugin Check will allow developers to periodically check their code for missteps or invalid code.
+This plugins intention is to minimize the number of common errors developers encounter when submitting plugins to WordPress.org for review. When submitting a plugin for admission into [WordPress.org](https://www.wordpress.org/plugins) there are a number of [guidelines](https://developer.wordpress.org/plugins/wordpress-org/detailed-plugin-guidelines/) that must be followed, and many developers miss steps or checks that prolong the review process over multiple days.
 
-Developers should use this plugin during development to check for any errors in their code, or to check their plugin before submitting it for review on [WordPress.org](https://www.wordpress.org/plugins).
+Developing a plugin in tandem with Plugin Check will allow developers to periodically check their code for missteps or invalid code that would prevent a plugin from being accepted into the [WordPress.org](https://www.wordpress.org/plugins) repository.
+
+Developers should use this plugin during development to check for any errors in their code, or, at the very least, use Plugin Check to scan their plugin before submitting it for review on [WordPress.org](https://www.wordpress.org/plugins).
 
 ### Ignored Files When Scanning
 If this plugin is used during development, there may be many files in the working copy of your plugin. Plugin Check works by zipping up your local plugin directory, and then scanning that against a set of rules. Some files might get included in the .zip that shouldn't be, so Plugin Check does it's best to exclude a default set of files that are generally used during development that will throw an error during plugin scans.
@@ -50,3 +52,7 @@ To run Plugin Check repository locally:
 - Head to 'Tools > Plugin Check'
 - Select your plugin from the dropdown menu and click on 'Check Plugin'
 - Check the results of the plugin scan in the text field below
+
+### Credits
+
+This plugin was built leveraging the open source WordPress [plugin-scan.sh](https://github.com/Ipstenu/plugin-scan) by [@Ipstenu](https://github.com/Ipstenu). Huge thanks to the [WordPress.org](https://www.wordpress.org/plugins) plugin review team.
