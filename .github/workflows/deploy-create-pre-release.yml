@@ -29,6 +29,7 @@ jobs:
         run: |
           gh release delete $RELEASE_VERSION --cleanup-tag --yes
           gh release create $RELEASE_VERSION -n "This is the beta version of Plugin Check with the latest changes. This is not an official release." -t "$RELEASE_VERSION" --prerelease
+          gh release edit $RELEASE_VERSION --prerelease
 
       - name: Upload asset to release
         env:
