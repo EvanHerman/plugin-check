@@ -18,7 +18,7 @@ jobs:
       - name: Append -beta onto the plugin version in the plugin header
         run: |
           ls -la
-          sed -i '' 's/Version: .*/Version: '"$VERSION"-beta'/' class-plugin-check.php
+          sed -i 's/Version: .*/Version: '"$VERSION"-beta'/' class-plugin-check.php
 
       - name: Build Plugin Check
         run: npm run build
