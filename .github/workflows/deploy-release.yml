@@ -29,6 +29,12 @@ jobs:
       - name: Run version update
         run: npm --no-git-tag-version version $NEW_TAG_VERSION
 
+      - name: Push changes
+        run: |
+          git add -A .
+          git commit -m "Updating to version $NEW_TAG_VERSION" --no-verify
+          git push
+
       - name: Create release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
