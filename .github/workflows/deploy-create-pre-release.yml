@@ -33,7 +33,7 @@ jobs:
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          gh release create "Plugin Check - Beta" -n "This is the beta version of Plugin Check with the latest changes. This is not an official release." -t "$RELEASE_VERSION" --prerelease
+          gh release create $RELEASE_VERSION -n "This is the beta version of Plugin Check with the latest changes. This is not an official release." -t "Plugin Check - Beta Release" --prerelease
 
       - name: Upload asset to release
         env:
