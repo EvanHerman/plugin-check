@@ -1,0 +1,3 @@
+[submodule "bin/plugin-scan"]
+	path = bin/plugin-scan
+	url = git@github.com:Ipstenu/plugin-scan.git

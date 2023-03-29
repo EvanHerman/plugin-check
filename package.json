@@ -1,0 +1,17 @@
+{
+	"name": "Plugin Check",
+	"title": "Plugin Check",
+	"description": "Scan a plugin for various checks when developing a WordPress plugin for the WordPress.org repository.",
+	"version": "1.0.0",
+	"tested_up_to": "6.2",
+	"author": "Evan Herman",
+	"license": "GPL-2.0",
+	"repository": "EvanHerman/plugin-check",
+	"homepage": "https://www.github.com/EvanHerman/plugin-check",
+	"bugs": {
+		"url": "https://www.github.com/EvanHerman/plugin-check/issues"
+	},
+	"scripts": {
+		"setup": "./bin/update-submodules.sh"
+	}
+}
