@@ -38,6 +38,11 @@ jobs:
       - name: Build Plugin Check
         run: npm run build
 
+      - name: Setup the Git user
+        run: |
+          git config user.name "GitHub Actions Bot"
+          git config user.email "<>"
+
       - name: Publish new tag
         run: |
           git tag $NEW_TAG_VERSION
