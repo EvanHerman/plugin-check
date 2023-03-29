@@ -90,7 +90,7 @@ final class WP_Plugin_Check {
 			wp_kses_post(
 				printf(
 					/* translators: %s: link to the plugin guidelines */
-					__( 'When in doubt, please read the <a href="%s" target="_blank">Plugin Guidelines</a> thoroughly before submitting your plugin to the WordPress.org repository. If you still require assistance, you can contact the plugin team via Slack in #pluginreview.', 'plugin-check' ),
+					__( 'When in doubt, please read the <a href="%s" target="_blank" title="WordPress.org Plugin Guidelines">Plugin Guidelines</a> thoroughly before submitting your plugin to the WordPress.org repository. If you still require assistance, you can contact the plugin team via Slack in #pluginreview.', 'plugin-check' ),
 					'https://developer.wordpress.org/plugins/wordpress-org/detailed-plugin-guidelines/'
 				)
 			);
