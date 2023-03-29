@@ -19,4 +19,5 @@ rm -f build/plugin-check/bin/plugin-scan/README.md
 rm -rf build/plugin-check/test-results/*
 
 # ZIP the plugin
-zip -r build/plugin-check.zip build/plugin-check/
+cd build/
+zip -r plugin-check.zip plugin-check/
