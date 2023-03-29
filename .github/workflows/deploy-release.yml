@@ -19,7 +19,7 @@ jobs:
         run: npm run build
 
       - name: Set version
-        run: echo "NEW_TAG_VERSION=${{ github.event.milestone.title }}" >> $GITHUB_ENV
+        run: echo "NEW_TAG_VERSION=${{ github.ref_name }}" >> $GITHUB_ENV
 
       - name: Publish new tag
         run: |
