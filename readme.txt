@@ -1,4 +1,4 @@
-=== Theme Check ===
+=== Plugin Check ===
 Contributors: eherman24
 Stable tag: 0.0.2
 Requires at Least: 6.0
