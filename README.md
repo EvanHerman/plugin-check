@@ -5,7 +5,6 @@ The Plugin Check plugin can be used to check a plugin locally on a test site dur
 
 ![Plugin Check Image](https://cldup.com/5O4Gkughpa.png)
 
-
 ### Intentions
 This plugins intention is to minimize the common pitfalls and errors developers encounter when submitting plugins to WordPress.org for review.
 
@@ -49,15 +48,27 @@ The following files *will not* be included in the .zip that is scanned.
 - `webpack.config.js`
 - `yarn.lock`
 
-### Setup
+### Installation & Usage
+
+- Download the latest release of Plugin Check (`plugin-check.zip`) from the [releases](https://github.com/EvanHerman/plugin-check/releases).
+- Login to your WordPress website and go to 'Plugins > Add New'.
+- At the top of the page, click on 'Upload Plugin'.
+- Select the `plugin-check.zip` file you downloaded in step 1.
+- Activate Plugin Check.
+- Navigate to 'Tools > Plugin Check'.
+- Select your plugin from the dropdown list and click 'Check Plugin'.
+- Or to check a remote plugin, click on the 'Remote Plugin' tab and enter the URL of the remote location where your plugin is.
+
+### Development
 
 To run Plugin Check repository locally:
-- Clone this repository into your `wp-content/plugins` directory
-- From the Plugin Check root, run `npm run setup`
-- Activate 'Plugin Check' from the WordPress dashboard
-- Head to 'Tools > Plugin Check'
-- Select your plugin from the dropdown menu and click on 'Check Plugin'
-- Check the results of the plugin scan in the text field below
+- Clone this repository into your `wp-content/plugins` directory.
+- From the Plugin Check root, run `npm run setup`.
+- Activate 'Plugin Check' from the WordPress dashboard.
+- Head to 'Tools > Plugin Check'.
+- Select your plugin from the dropdown list and click on 'Check Plugin'.
+- Check the results of the plugin scan in the text field below.
+- Or to check a remote plugin, click on the 'Remote Plugin' tab and enter the URL of the remote location where your plugin is.
 
 ### Credits
 
