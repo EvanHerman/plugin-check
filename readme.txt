@@ -1,6 +1,6 @@
 === Theme Check ===
 Contributors: eherman24
-Stable tag: 0.0.1
+Stable tag: 0.0.2
 Requires at Least: 6.0
 Tested Up To: 6.2
 Requires PHP: 7.4
