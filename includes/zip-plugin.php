@@ -14,10 +14,34 @@ final class WP_Plugin_Check_Zip_Plugin {
 		$default_excluded_files = apply_filters(
 			'wp_plugin_check_default_excluded_files',
 			array(
+				'.github',
+				'.wordpress-org',
+				'.distinclude',
+				'.editorconfig',
+				'.eslintignore',
+				'.eslintrc.js',
+				'.gitignore',
+				'.npmrc',
+				'.nvmrc',
+				'.stylelintignore',
+				'.stylelintrc.json',
+				'CODE_OF_CONDUCT.md',
+				'CONTRIBUTORS.md',
+				'babel.config.json',
+				'composer.json',
+				'composer.lock',
+				'cypress.config.js',
 				'node_modules',
 				'vendor',
 				'.htaccess',
 				'Gruntfile.js',
+				'gruntfile.js',
+				'manifest.xml',
+				'package.json',
+				'phpcs.xml',
+				'phpunit.xml.dist',
+				'webpack.config.js',
+				'yarn.lock',
 			),
 		);
 
@@ -86,7 +110,7 @@ final class WP_Plugin_Check_Zip_Plugin {
 
 				// Add Exclusion
 				if ( ! empty( $exclusions ) ) {
-					if ( in_array( str_replace( $source . '/', '', $file ), $exclusions ) ) {
+					if ( in_array( str_replace( $source . '/', '', $file, true ), $exclusions ) ) {
 						continue;
 					}
 				}
