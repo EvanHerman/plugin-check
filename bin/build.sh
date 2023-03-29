@@ -16,6 +16,7 @@ cp -r bin/ build/plugin-check/bin/
 
 # Remove what we don't need
 rm -f build/plugin-check/bin/plugin-scan/README.md
+rm -f build/plugin-check/bin/plugin-scan/.git
 rm -rf build/plugin-check/test-results/*
 
 # ZIP the plugin
