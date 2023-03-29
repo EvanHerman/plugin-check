@@ -17,3 +17,7 @@ sed -i "s/define( 'WP_PLUGIN_CHECK_VERSION', .*/define( 'WP_PLUGIN_CHECK_VERSION
 # Replace the plugin version in the README.md file.
 # # WordPress Plugin Check v0.0.1
 sed -i "s/# WordPress Plugin Check .*/# WordPress Plugin Check v"$VERSION"/" README.md
+
+# Replace the plugin version in the readme.txt file.
+# Stable tag: 0.0.1
+sed -i "s/Stable tag: .*/Stable tag: "$VERSION"/" readme.txt
