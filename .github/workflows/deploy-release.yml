@@ -16,7 +16,9 @@ jobs:
           ref: ${{ github.event.repository.default_branch }}
 
       - name: Set version
-        run: echo "NEW_TAG_VERSION=$(jq -r .version package.json)" >> $GITHUB_ENV
+        run: |
+          ls -la
+          echo "NEW_TAG_VERSION=$(jq -r .version package.json)" >> $GITHUB_ENV
 
       - name: Build Plugin Check
         run: npm run build
