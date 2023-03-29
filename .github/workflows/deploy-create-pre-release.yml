@@ -23,6 +23,12 @@ jobs:
         run: |
           echo "RELEASE_VERSION=beta" >> $GITHUB_ENV
 
+      - name: Delete existing tag
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh release delete --cleanup-tag --yes
+
       - name: Create release
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
