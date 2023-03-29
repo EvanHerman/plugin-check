@@ -7,7 +7,7 @@ The Plugin Check plugin can be used to check a plugin locally on a test site dur
 
 
 ### Intentions
-This plugins intention is to minimize the common pitfalls and common errors developers encounter when submitting plugins to WordPress.org for review.
+This plugins intention is to minimize the common pitfalls and errors developers encounter when submitting plugins to WordPress.org for review.
 
 When submitting a plugin for admission into [WordPress.org](https://www.wordpress.org/plugins) there are a number of [guidelines](https://developer.wordpress.org/plugins/wordpress-org/detailed-plugin-guidelines/) that must be followed, and many developers miss steps or checks that prolong the review process over multiple days.
 
