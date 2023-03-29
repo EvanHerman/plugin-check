@@ -24,6 +24,8 @@ jobs:
           echo "RELEASE_VERSION=beta" >> $GITHUB_ENV
 
       - name: Create release
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           gh release create $RELEASE_VERSION -n "This is the beta version of Plugin Check with the latest changes. This is not an official release." -t "$RELEASE_VERSION" --prerelease
 
