@@ -2,7 +2,7 @@
 /*
  * Plugin Name: Plugin Check
  * Description: Scan a plugin for various checks when developing a WordPress plugin for the WordPress.org repository.
- * Version: 1.0.0
+ * Version: 0.0.1
  * Tested up to: 6.2
  * Author: Evan Herman
  * Author URI: https://evan-herman.com
@@ -29,7 +29,7 @@ final class WP_Plugin_Check {
 	 */
 	public function __construct() {
 
-		define( 'WP_PLUGIN_CHECK_VERSION', '1.0.0' );
+		define( 'WP_PLUGIN_CHECK_VERSION', '0.0.1' );
 		define( 'WP_PLUGIN_SCRIPT_DIR', plugin_dir_path( __FILE__ ) . 'bin/plugin-scan/' );
 
 		add_action( 'admin_menu', array( $this, 'add_admin_menu' ) );
