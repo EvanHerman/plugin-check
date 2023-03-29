@@ -3,6 +3,8 @@ Scan your WordPress plugin for common errors before submitting it to WordPress.o
 
 The Plugin Check plugin can be used to check a plugin locally on a test site during development, or it can be used to check a plugin `.zip` from a remote URL.
 
+![Plugin Check Image](https://cldup.com/5O4Gkughpa.png)
+
 
 ### Intentions
 This plugins intention is to minimize the common pitfalls and common errors developers encounter when submitting plugins to WordPress.org for review.
