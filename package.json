@@ -12,6 +12,7 @@
 		"url": "https://www.github.com/EvanHerman/plugin-check/issues"
 	},
 	"scripts": {
-		"setup": "./bin/update-submodules.sh"
+		"setup": "./bin/update-submodules.sh",
+		"build": "./bin/build.sh"
 	}
 }
