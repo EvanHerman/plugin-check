@@ -17,7 +17,7 @@ class WP_Plugin_Check_Remote_Updater {
 		$this->plugin_slug   = dirname ( plugin_basename( __DIR__ ) );
 		$this->version       = '0.0.3';
 		$this->cache_key     = 'wp_plugin_check_remote_updater';
-		$this->cache_allowed = true;
+		$this->cache_allowed = false;
 
 		add_filter( 'plugins_api', [ $this, 'info' ], 20, 3 );
 		add_filter( 'site_transient_update_plugins', [ $this, 'update' ] );
@@ -109,16 +109,18 @@ class WP_Plugin_Check_Remote_Updater {
 
 	public function update( $transient ) {
 
-		if ( empty($transient->checked ) ) {
+		if ( empty( $transient->checked ) ) {
 			return $transient;
 		}
 
 		$remote = $this->request();
 
+		wp_die( print_r( $remote ) );
+
 		if ( $remote && version_compare( $this->version, $remote->version, '<' ) && version_compare( $remote->requires, get_bloginfo( 'version' ), '<=' ) && version_compare( $remote->requires_php, PHP_VERSION, '<' ) ) {
 			$response              = new \stdClass();
 			$response->slug        = $this->plugin_slug;
-			$response->plugin      = "{$this->plugin_slug}/{$this->plugin_slug}.php";
+			$response->plugin      = "{$this->plugin_slug}/class-plugin-check.php";
 			$response->new_version = $remote->version;
 			$response->tested      = $remote->tested;
 			$response->package     = $remote->download_url;
