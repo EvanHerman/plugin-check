@@ -11,7 +11,7 @@ sed -i 's/Version: .*/Version: '"$VERSION"'/' class-plugin-check.php
 
 # Replace the plugin version in the remote update class.
 # $this->version       = '0.0.2';
-sed -i '' 's/$this->version .*/$this->version       = '"'$VERSION'"';/' includes/class-remote-update.php
+sed -i 's/$this->version .*/$this->version       = '"'$VERSION'"';/' includes/class-remote-update.php
 
 # Replace the plugin version constant.
 # define( 'WP_PLUGIN_CHECK_VERSION', '1.0.0' );
