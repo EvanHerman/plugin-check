@@ -33,4 +33,4 @@ sed -i "s/Stable tag: .*/Stable tag: "$VERSION"/" readme.txt
 
 # Update the deploy time in the remote update manifest file.
 # "last_updated" : "2023-03-30 00:00:00",
-sed -i '' 's/"last_updated" : .*/"last_updated" : "'"$(date -u +"%Y-%m-%d %T")"'",/' remote-update-assets/manifest.json
+sed -i 's/"last_updated" : .*/"last_updated" : "'"$(date -u +"%Y-%m-%d %T")"'",/' remote-update-assets/manifest.json
