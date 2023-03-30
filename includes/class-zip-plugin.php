@@ -1,16 +1,16 @@
 <?php
 /**
- * Zip a specified directory.
+ * ZIP a specified directory.
  *
  * @package WP_Plugin_Check
- * @since 1.0.0
+ * @since 0.0.1
  */
 final class WP_Plugin_Check_Zip_Plugin {
 
 	/**
 	 * Class constructor.
 	 *
-	 * @since 1.0.0
+	 * @since 0.0.1
 	 */
 	public function __construct( $source, $destination, $include_dir = false, $exclusions = array() ) {
 
@@ -68,7 +68,7 @@ final class WP_Plugin_Check_Zip_Plugin {
 	 * @param bool   $include_dir Whether to include the source directory in the zip file.
 	 * @param array  $exclusions  List of files to exclude from the zip file.
 	 *
-	 * @since 1.0.0
+	 * @since 0.0.1
 	 */
 	public function zip_plugin( $source, $destination, $include_dir = false, $exclusions = array() ) {
 

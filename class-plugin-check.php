@@ -25,7 +25,7 @@ final class WP_Plugin_Check {
 	/**
 	 * Class constructor.
 	 *
-	 * @since 1.0.0
+	 * @since 0.0.1
 	 */
 	public function __construct() {
 
@@ -41,7 +41,7 @@ final class WP_Plugin_Check {
 	/**
 	 * Add 'Plugin Check' to the tools menu.
 	 *
-	 * @since 1.0.0
+	 * @since 0.0.1
 	 */
 	public function add_admin_menu() {
 
@@ -58,7 +58,7 @@ final class WP_Plugin_Check {
 	/**
 	 * Plugin Check page.
 	 *
-	 * @since 1.0.0
+	 * @since 0.0.1
 	 */
 	public function plugin_check() {
 
@@ -125,7 +125,7 @@ final class WP_Plugin_Check {
 	/**
 	 * Remote Plugin Check tab.
 	 *
-	 * @since 1.0.0
+	 * @since 0.0.1
 	 */
 	private function remote_plugins_tab() {
 
@@ -171,7 +171,7 @@ final class WP_Plugin_Check {
 	/**
 	 * Local Plugin Check tab.
 	 *
-	 * @since 1.0.0
+	 * @since 0.0.1
 	 */
 	private function local_plugins_tab() {
 
@@ -223,7 +223,7 @@ final class WP_Plugin_Check {
 	/**
 	 * Display the plugin scan results.
 	 *
-	 * @since 1.0.0
+	 * @since 0.0.1
 	 */
 	private function show_scan_results() {
 
@@ -262,7 +262,7 @@ final class WP_Plugin_Check {
 	/**
 	 * Get a list of all plugins.
 	 *
-	 * @since 1.0.0
+	 * @since 0.0.1
 	 */
 	public function get_plugins() {
 
@@ -280,7 +280,7 @@ final class WP_Plugin_Check {
 	/**
 	 * Remove a directory and all of its contents.
 	 *
-	 * @since 1.0.0
+	 * @since 0.0.1
 	 */
 	public function remove_directory( $path ) {
 
@@ -305,7 +305,7 @@ final class WP_Plugin_Check {
 	/**
 	 * Scan a remote plugin.
 	 *
-	 * @since 1.0.0
+	 * @since 0.0.1
 	 */
 	public function scan_remote_plugin( $plugin_url = '' ) {
 
@@ -369,7 +369,7 @@ final class WP_Plugin_Check {
 	/**
 	 * Scan a local plugin.
 	 *
-	 * @since 1.0.0
+	 * @since 0.0.1
 	 */
 	public function scan_local_plugin( $plugin_dir = '' ) {
 
@@ -449,7 +449,7 @@ final class WP_Plugin_Check {
 	 * @param string $message     The message to display.
 	 * @param string $notice_type The type of notice to display. Default is 'error'.
 	 *
-	 * @since 1.0.0
+	 * @since 0.0.1
 	 */
 	private function print_notice( $message = '', $notice_type = 'error' ) {
 

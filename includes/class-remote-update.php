@@ -1,5 +1,10 @@
 <?php
-
+/**
+ * Receive remote updates for GitHub.
+ *
+ * @package WP_Plugin_Check
+ * @since 0.0.3
+ */
 class WP_Plugin_Check_Remote_Updater {
 
 	public $plugin_slug;
