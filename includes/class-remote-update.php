@@ -109,6 +109,10 @@ class WP_Plugin_Check_Remote_Updater {
 
 	public function update( $transient ) {
 
+		if ( isset( $transient->response['plugin-check/class-plugin-check.php'] ) ) {
+			unset( $transient->response['plugin-check/class-plugin-check.php'] );
+		}
+
 		if ( empty( $transient->checked ) ) {
 			return $transient;
 		}
