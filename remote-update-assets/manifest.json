@@ -15,7 +15,7 @@
 	"sections" : {
 		"description" : "Scan a plugin for various checks when developing a WordPress plugin for the WordPress.org repository.",
 		"installation" : "Click the activate button and that's it.",
-		"changelog" : "<h4>v0.0.2 released on March 03, 2023</h4><ul><li>Feature: Added remote updates from GitHub.</li></ul>"
+		"changelog" : "<h4>v0.0.3 released on March 03, 2023</h4><ul><li>Feature: Added remote updates from GitHub.</li></ul>"
 	},
 	"banners" : {
 		"low" : "https://raw.githubusercontent.com/EvanHerman/plugin-check/main/remote-update-assets/plugin-check-banner-772x250.webp",

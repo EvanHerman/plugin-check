@@ -18,6 +18,8 @@ cp -r bin/ build/plugin-check/bin/
 rm -f build/plugin-check/bin/plugin-scan/README.md
 rm -f build/plugin-check/bin/plugin-scan/.git
 rm -rf build/plugin-check/test-results/*
+rm -f build/plugin-check/bin/*.sh
+rm -f build/plugin-check/**/.DS_Store
 
 # ZIP the plugin
 cd build/
