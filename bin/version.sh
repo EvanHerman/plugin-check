@@ -13,7 +13,7 @@ sed -i 's/Version: .*/Version: '"$VERSION"'/' class-plugin-check.php
 # $this->version       = '0.0.2';
 sed -i 's/$this->version .*/$this->version       = '"'$VERSION'"';/' includes/class-remote-update.php
 
-# Replace the plugin versions in the manifest file.
+# Replace the plugin versions in the remote update manifest file.
 # "version" : "0.0.2",
 # "download_url" : "https://github.com/EvanHerman/plugin-check/releases/download/0.0.2/plugin-check.zip",
 sed -i 's/"version" : .*/"version" : '"\"$VERSION\""',/' remote-update-assets/manifest.json
@@ -30,3 +30,7 @@ sed -i "s/# WordPress Plugin Check .*/# WordPress Plugin Check v"$VERSION"/" REA
 # Replace the plugin version in the readme.txt file.
 # Stable tag: 0.0.1
 sed -i "s/Stable tag: .*/Stable tag: "$VERSION"/" readme.txt
+
+# Update the deploy time in the remote update manifest file.
+# "last_updated" : "2023-03-30 00:00:00",
+sed -i '' 's/"last_updated" : .*/"last_updated" : "'"$(date -u +"%Y-%m-%d %T")"'",/' remote-update-assets/manifest.json
