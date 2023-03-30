@@ -3,6 +3,7 @@
 	"slug" : "plugin-check",
 	"author" : "<a href='https://www.evan-herman.com>Evan Herman</a>",
 	"author_profile" : "https://profiles.wordpress.org/eherman24",
+	"donate_link" : "https://github.com/sponsors/EvanHerman",
 	"version" : "0.0.2",
 	"download_url" : "https://github.com/EvanHerman/plugin-check/releases/download/0.0.2/plugin-check.zip",
 	"requires" : "6.0",
