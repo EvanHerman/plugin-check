@@ -20,7 +20,7 @@
 
 final class WP_Plugin_Check {
 
-	private $scan_results;
+	public $scan_results;
 
 	/**
 	 * Class constructor.
