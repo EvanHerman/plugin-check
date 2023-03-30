@@ -15,7 +15,7 @@ class WP_Plugin_Check_Remote_Updater {
 	public function __construct() {
 
 		$this->plugin_slug   = dirname ( plugin_basename( __DIR__ ) );
-		$this->version       = '0.0.3';
+		$this->version       = '0.0.2';
 		$this->cache_key     = 'wp_plugin_check_remote_updater';
 		$this->cache_allowed = true;
 
@@ -141,6 +141,9 @@ class WP_Plugin_Check_Remote_Updater {
 			// just clean the cache when new plugin version is installed
 			delete_transient( $this->cache_key );
 		}
+
+		// Make our .sh files executable.
+		exec( 'chmod +x ' . WP_PLUGIN_SCRIPT_DIR . '*.sh' );
 
 	}
 
