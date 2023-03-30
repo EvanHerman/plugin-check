@@ -7,8 +7,11 @@ echo "Bumping the version to $VERSION"
 
 # Replace the plugin version header.
 # Version: 1.0.0
-# perl -i.bak -pe 's{(Version:\s+)\d+[.]\d+[.]\d+}{$1$ENV{VERSION}}g' class-plugin-check.php
 sed -i 's/Version: .*/Version: '"$VERSION"'/' class-plugin-check.php
+
+# Replace the plugin version in the remote update class.
+# $this->version       = '0.0.2';
+sed -i '' 's/$this->version .*/$this->version       = '"'$VERSION'"';/' includes/class-remote-update.php
 
 # Replace the plugin version constant.
 # define( 'WP_PLUGIN_CHECK_VERSION', '1.0.0' );
