@@ -29,6 +29,8 @@ final class WP_Plugin_Check {
 	 */
 	public function __construct() {
 
+		require_once plugin_dir_path( __FILE__ ) . 'includes/class-remote-update.php';
+
 		define( 'WP_PLUGIN_CHECK_VERSION', '0.0.2' );
 		define( 'WP_PLUGIN_SCRIPT_DIR', plugin_dir_path( __FILE__ ) . 'bin/plugin-scan/' );
 
@@ -390,7 +392,7 @@ final class WP_Plugin_Check {
 
 		}
 
-		require plugin_dir_path( __FILE__ ) . 'includes/zip-plugin.php';
+		require plugin_dir_path( __FILE__ ) . 'includes/class-zip-plugin.php';
 
 		$zip_destination = plugin_dir_path( __FILE__ ) . 'test-results/' . dirname( $plugin_dir ) . '/' . dirname( $plugin_dir ) . '.zip';
 
