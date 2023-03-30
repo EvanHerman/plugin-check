@@ -17,7 +17,7 @@ class WP_Plugin_Check_Remote_Updater {
 		$this->plugin_slug   = dirname ( plugin_basename( __DIR__ ) );
 		$this->version       = '0.0.2';
 		$this->cache_key     = 'wp_plugin_check_remote_updater';
-		$this->cache_allowed = false;
+		$this->cache_allowed = true;
 
 		add_filter( 'plugins_api', [ $this, 'info' ], 20, 3 );
 		add_filter( 'site_transient_update_plugins', [ $this, 'update' ] );
@@ -44,7 +44,7 @@ class WP_Plugin_Check_Remote_Updater {
 			}
 
 			if ( $this->cache_allowed ) {
-				set_transient( $this->cache_key, $remote, DAY_IN_SECONDS );
+				set_transient( $this->cache_key, $remote, 12 * HOUR_IN_SECONDS );
 			}
 
 		}
