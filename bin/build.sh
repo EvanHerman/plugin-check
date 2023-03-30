@@ -22,7 +22,7 @@ rm -f build/plugin-check/bin/*.sh
 rm -f build/plugin-check/**/.DS_Store
 
 # Remove the bash check in the plugin scan (doesn't work locally for me)
-sed -i '8,14d' 'bin/plugin-scan/plugin-scan.sh'
+sed -i '8,14d' 'build/plugin-check/bin/plugin-scan/plugin-scan.sh'
 
 chmod +x build/plugin-check/bin/plugin-scan/plugin-scan.sh
 chmod +x build/plugin-check/bin/plugin-scan/plugin-scan.sh.ignore
