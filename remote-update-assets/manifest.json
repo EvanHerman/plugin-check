@@ -1,0 +1,23 @@
+{
+	"name" : "Plugin Check",
+	"slug" : "plugin-check",
+	"author" : "<a href='https://www.evan-herman.com>Evan Herman</a>",
+	"author_profile" : "https://profiles.wordpress.org/eherman24",
+	"version" : "0.0.2",
+	"download_url" : "https://github.com/EvanHerman/plugin-check/releases/download/0.0.2/plugin-check.zip",
+	"requires" : "6.0",
+	"tested" : "6.2",
+	"requires_php" : "7.4",
+	"added" : "2023-03-30 00:00:00",
+	"last_updated" : "2023-03-30 00:00:00",
+	"homepage" : "https://github.com/EvanHerman/plugin-check",
+	"sections" : {
+		"description" : "Scan a plugin for various checks when developing a WordPress plugin for the WordPress.org repository.",
+		"installation" : "Click the activate button and that's it.",
+		"changelog" : "<h4>v0.0.2 released on March 03, 2023</h4><ul><li>Feature: Added remote updates from GitHub.</li></ul>"
+	},
+	"banners" : {
+		"low" : "https://github.com/EvanHerman/plugin-check/blob/main/remote-update-assets/plugin-check-banner-772x250.webp",
+		"high" : "https://github.com/EvanHerman/plugin-check/blob/main/remote-update-assets/plugin-check-banner-1544x500.webp"
+	}
+}
