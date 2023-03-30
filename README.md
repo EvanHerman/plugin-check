@@ -1,4 +1,4 @@
-# WordPress Plugin Check v0.0.2
+# WordPress Plugin Check v0.0.3
 Scan your WordPress plugin for common errors before submitting it to WordPress.org for review.
 
 The Plugin Check plugin can be used to check a plugin locally on a test site during development, or it can be used to check a plugin `.zip` from a remote URL.
