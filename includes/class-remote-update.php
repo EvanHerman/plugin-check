@@ -15,9 +15,9 @@ class WP_Plugin_Check_Remote_Updater {
 	public function __construct() {
 
 		$this->plugin_slug   = dirname ( plugin_basename( __DIR__ ) );
-		$this->version       = '0.0.3';
+		$this->version       = '0.0.2';
 		$this->cache_key     = 'wp_plugin_check_remote_updater';
-		$this->cache_allowed = false;
+		$this->cache_allowed = true;
 
 		add_filter( 'plugins_api', [ $this, 'info' ], 20, 3 );
 		add_filter( 'site_transient_update_plugins', [ $this, 'update' ] );
@@ -109,6 +109,7 @@ class WP_Plugin_Check_Remote_Updater {
 
 	public function update( $transient ) {
 
+		// Prevents our plugin from checking updates with https://wordpress.org/plugins/plugin-check/
 		if ( isset( $transient->response['plugin-check/class-plugin-check.php'] ) ) {
 			unset( $transient->response['plugin-check/class-plugin-check.php'] );
 		}
