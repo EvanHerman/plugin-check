@@ -31,8 +31,13 @@ final class WP_Plugin_Check {
 
 		require_once plugin_dir_path( __FILE__ ) . 'includes/class-remote-update.php';
 
-		define( 'WP_PLUGIN_CHECK_VERSION', '0.0.3' );
-		define( 'WP_PLUGIN_SCRIPT_DIR', plugin_dir_path( __FILE__ ) . 'bin/plugin-scan/' );
+		if ( ! defined( 'WP_PLUGIN_CHECK_VERSION' ) ) {
+			define( 'WP_PLUGIN_CHECK_VERSION', '0.0.3' );
+		}
+
+		if ( ! defined( 'WP_PLUGIN_SCRIPT_DIR' ) ) {
+			define( 'WP_PLUGIN_SCRIPT_DIR', plugin_dir_path( __FILE__ ) . 'bin/plugin-scan/' );
+		}
 
 		add_action( 'admin_menu', array( $this, 'add_admin_menu' ) );
 
@@ -225,7 +230,7 @@ final class WP_Plugin_Check {
 	 *
 	 * @since 0.0.1
 	 */
-	private function show_scan_results() {
+	public function show_scan_results() {
 
 		wp_enqueue_script(
 			'scan-results',
