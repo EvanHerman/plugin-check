@@ -115,8 +115,6 @@ class WP_Plugin_Check_Remote_Updater {
 
 		$remote = $this->request();
 
-		wp_die( print_r( $remote ) );
-
 		if ( $remote && version_compare( $this->version, $remote->version, '<' ) && version_compare( $remote->requires, get_bloginfo( 'version' ), '<=' ) && version_compare( $remote->requires_php, PHP_VERSION, '<' ) ) {
 			$response              = new \stdClass();
 			$response->slug        = $this->plugin_slug;
