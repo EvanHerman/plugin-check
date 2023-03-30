@@ -13,6 +13,12 @@ sed -i 's/Version: .*/Version: '"$VERSION"'/' class-plugin-check.php
 # $this->version       = '0.0.2';
 sed -i 's/$this->version .*/$this->version       = '"'$VERSION'"';/' includes/class-remote-update.php
 
+# Replace the plugin versions in the manifest file.
+# "version" : "0.0.2",
+# "download_url" : "https://github.com/EvanHerman/plugin-check/releases/download/0.0.2/plugin-check.zip",
+sed -i 's/"version" : .*/"version" : '"\"$VERSION\""',/' remote-update-assets/manifest.json
+sed -i 's/"download_url" : .*/"download_url" : "https\:\/\/github\.com\/EvanHerman\/plugin-check\/releases\/download\/'"$VERSION"'\/plugin-check\.zip",/' remote-update-assets/manifest.json
+
 # Replace the plugin version constant.
 # define( 'WP_PLUGIN_CHECK_VERSION', '1.0.0' );
 sed -i "s/define( 'WP_PLUGIN_CHECK_VERSION', .*/define( 'WP_PLUGIN_CHECK_VERSION', '"$VERSION"' );/" class-plugin-check.php
