@@ -98,7 +98,8 @@ final class WP_Plugin_Check {
 				esc_html__( 'When in doubt, please read the %s thoroughly before submitting your plugin to the WordPress.org repository. If you still require assistance, you can contact the plugin team via Slack in #pluginreview.', 'example-domain' ),
 				wp_kses_post(
 					sprintf(
-						'<a href="https://developer.wordpress.org/plugins/wordpress-org/detailed-plugin-guidelines/" target="_blank">%s</a>',
+						'<a href="https://developer.wordpress.org/plugins/wordpress-org/detailed-plugin-guidelines/" target="_blank" title="%1$s">%2$s</a>',
+						esc_attr__( 'WordPress.org Detailed Plugin Guidelines', 'plugin-check' ),
 						esc_html__( 'Plugin Guidelines', 'plugin-check' )
 					)
 				)
