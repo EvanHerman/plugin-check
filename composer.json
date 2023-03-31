@@ -1,0 +1,26 @@
+{
+	"name": "evanherman/plugin-check",
+	"description": "Scan a plugin for various checks when developing a WordPress plugin for the WordPress.org repository.",
+	"type": "wordpress-plugin",
+	"license": "GPL-2.0-only",
+	"config": {
+		"platform": {
+			"php": "7.4"
+		},
+		"allow-plugins": {
+			"dealerdirect/phpcodesniffer-composer-installer": true
+		}
+	},
+	"require": {
+		"php": ">=7.4"
+	},
+	"require-dev": {
+		"dealerdirect/phpcodesniffer-composer-installer": "*",
+		"phpcompatibility/phpcompatibility-wp": "*",
+		"squizlabs/php_codesniffer": "*",
+		"wp-coding-standards/wpcs": "*"
+	},
+	"scripts": {
+		"lint": "@php ./vendor/bin/phpcs . --standard=phpcs.xml --runtime-set ignore_warnings_on_exit 1"
+	}
+}

@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * Plugin Name: Plugin Check
  * Description: Scan a plugin for various checks when developing a WordPress plugin for the WordPress.org repository.
  * Version: 0.0.3
@@ -17,7 +17,6 @@
  *
  * @package WP_Plugin_Check
  */
-
 final class WP_Plugin_Check {
 
 	public $scan_results;
@@ -81,37 +80,40 @@ final class WP_Plugin_Check {
 			true
 		);
 
-		$default_tab = null;
-		$tab         = isset( $_GET['tab'] ) ? htmlspecialchars( $_GET['tab'] ) : $default_tab;
+		$tab = filter_input( INPUT_GET, 'tab' );
+		$tab = $tab ? htmlspecialchars( $tab ) : null;
 
 		?>
 
 		<div class="wrap">
 
-			<h1><?php echo esc_html( get_admin_page_title() ); ?>&nbsp;<small><?php printf( 'v%s', WP_PLUGIN_CHECK_VERSION ); ?></small></h1>
+			<h1><?php echo esc_html( get_admin_page_title() ); ?>&nbsp;<small><?php printf( 'v%s', esc_html( WP_PLUGIN_CHECK_VERSION ) ); ?></small></h1>
 
 			<p class="description"><?php esc_html_e( 'Scan a plugin for various checks when developing a WordPress plugin for the WordPress.org repository.', 'plugin-check' ); ?></p>
 			<p class="description"><strong><?php esc_html_e( 'Note:', 'plugin-check' ); ?></strong> <?php echo esc_html_e( 'This does not, cannot, scan for everything. What it does is provide an overview look into the code and outputs in a manner easy to return to a developer.', 'plugin-check' ); ?></p>
 			<p class="description">
 			<?php
-			wp_kses_post(
-				printf(
-					/* translators: %s: link to the plugin guidelines */
-					__( 'When in doubt, please read the <a href="%s" target="_blank" title="WordPress.org Plugin Guidelines">Plugin Guidelines</a> thoroughly before submitting your plugin to the WordPress.org repository. If you still require assistance, you can contact the plugin team via Slack in #pluginreview.', 'plugin-check' ),
-					'https://developer.wordpress.org/plugins/wordpress-org/detailed-plugin-guidelines/'
+			printf(
+				/* translators: %1$s is a link with text "Google" and URL google.com */
+				esc_html__( 'When in doubt, please read the %s thoroughly before submitting your plugin to the WordPress.org repository. If you still require assistance, you can contact the plugin team via Slack in #pluginreview.', 'example-domain' ),
+				wp_kses_post(
+					sprintf(
+						'<a href="https://developer.wordpress.org/plugins/wordpress-org/detailed-plugin-guidelines/" target="_blank">%s</a>',
+						esc_html__( 'Plugin Guidelines', 'plugin-check' )
+					)
 				)
 			);
 			?>
 			</p>
 
 			<nav class="nav-tab-wrapper">
-				<a href="?page=plugin-check" class="nav-tab <?php if($tab===null):?>nav-tab-active<?php endif; ?>"><?php esc_html_e( 'Local Plugin', 'plugin-check' ); ?></a>
-				<a href="?page=plugin-check&tab=remote-plugin" class="nav-tab<?php if ( 'remote-plugin' === $tab ) {?> nav-tab-active<?php } ?>"><?php esc_html_e( 'Remote Plugin', 'plugin-check' ); ?></a>
+				<a href="?page=plugin-check" class="nav-tab <?php if ( null === $tab ) : ?>nav-tab-active<?php endif; ?>"><?php esc_html_e( 'Local Plugin', 'plugin-check' ); ?></a>
+				<a href="?page=plugin-check&tab=remote-plugin" class="nav-tab<?php if ( 'remote-plugin' === $tab ) : ?> nav-tab-active<?php endif; ?>"><?php esc_html_e( 'Remote Plugin', 'plugin-check' ); ?></a>
 			</nav>
 
 			<div class="tab-content">
 			<?php
-				switch($tab) :
+			switch ( $tab ) :
 				case 'remote-plugin':
 					$this->remote_plugins_tab();
 					break;
@@ -134,9 +136,10 @@ final class WP_Plugin_Check {
 	 */
 	private function remote_plugins_tab() {
 
-		if ( isset( $_POST['remote-plugin-url'] ) ) {
+		$plugin_url            = filter_input( INPUT_POST, 'remote-plugin-url', FILTER_SANITIZE_URL );
+		$preserve_scan_results = filter_input( INPUT_POST, 'preserve-scan-results', FILTER_VALIDATE_BOOLEAN );
 
-			$plugin_url = filter_input( INPUT_POST, 'remote-plugin-url', FILTER_SANITIZE_URL );
+		if ( $plugin_url ) {
 
 			$this->scan_remote_plugin( $plugin_url );
 
@@ -152,7 +155,7 @@ final class WP_Plugin_Check {
 
 			<input type="text" required name="remote-plugin-url" value="<?php echo esc_attr( $plugin_url ?? '' ); ?>" style="width: 50%;" />
 
-			<input type="checkbox" id="preserve-scan-results" name="preserve-scan-results" value="true" <?php checked( $_POST['preserve-scan-results'] ?? 'false', 'true' ); ?> />
+			<input type="checkbox" id="preserve-scan-results" name="preserve-scan-results" value="true" <?php checked( $preserve_scan_results ?? 'true', 'false' ); ?> />
 			<label for="preserve-scan-results"><?php esc_html_e( 'Preserve Scan Results', 'plugin-check' ); ?></label>
 
 			<br />
@@ -180,11 +183,12 @@ final class WP_Plugin_Check {
 	 */
 	private function local_plugins_tab() {
 
-		$checked_plugin = '';
+		$checked_plugin        = filter_input( INPUT_POST, 'plugin-to-check' );
+		$preserve_scan_results = filter_input( INPUT_POST, 'preserve-scan-results', FILTER_VALIDATE_BOOLEAN );
 
-		if ( isset( $_POST['plugin-to-check'] ) ) {
+		if ( $checked_plugin ) {
 
-			$checked_plugin = htmlspecialchars( $_POST['plugin-to-check'] );
+			$checked_plugin = htmlspecialchars( $checked_plugin );
 
 			$this->scan_local_plugin( $checked_plugin );
 
@@ -200,11 +204,11 @@ final class WP_Plugin_Check {
 
 			<select name="plugin-to-check">
 				<?php foreach ( $this->get_plugins() as $plugin_path => $name ) : ?>
-					<option value="<?php echo esc_attr( $plugin_path ); ?>" <?php selected( $checked_plugin, $plugin_path ); ?>><?php echo esc_html( $name ); ?></option>
+					<option value="<?php echo esc_attr( $plugin_path ); ?>" <?php selected( $checked_plugin ?? '', $plugin_path ); ?>><?php echo esc_html( $name ); ?></option>
 				<?php endforeach; ?>
 			</select>
 
-			<input type="checkbox" id="preserve-scan-results" name="preserve-scan-results" value="true" <?php checked( $_POST['preserve-scan-results'] ?? 'false', 'true' ); ?> />
+			<input type="checkbox" id="preserve-scan-results" name="preserve-scan-results" value="true" <?php checked( $preserve_scan_results ?? 'true', 'false' ); ?> />
 			<label for="preserve-scan-results"><?php esc_html_e( 'Preserve Scan Results', 'plugin-check' ); ?></label>
 
 			<br />
@@ -246,9 +250,9 @@ final class WP_Plugin_Check {
 			array(
 				'codeEditor' => wp_enqueue_code_editor(
 					array(
-						'type' => 'text/css'
+						'type' => 'text/css',
 					)
-				)
+				),
 			)
 		);
 
@@ -257,7 +261,7 @@ final class WP_Plugin_Check {
 
 		printf(
 			'<h2>%s</h2>',
-			esc_html__( 'Scan Results', 'plugin-check')
+			esc_html__( 'Scan Results', 'plugin-check' )
 		);
 
 		echo '<textarea style="height: 100%;" class="scan-results widefat">' . esc_textarea( $this->scan_results ) . '</textarea>';
@@ -285,6 +289,8 @@ final class WP_Plugin_Check {
 	/**
 	 * Remove a directory and all of its contents.
 	 *
+	 * @param string $path The path to the directory to remove.
+	 *
 	 * @since 0.0.1
 	 */
 	public function remove_directory( $path ) {
@@ -309,6 +315,8 @@ final class WP_Plugin_Check {
 
 	/**
 	 * Scan a remote plugin.
+	 *
+	 * @param string $plugin_url The URL to the plugin .zip.
 	 *
 	 * @since 0.0.1
 	 */
@@ -338,9 +346,9 @@ final class WP_Plugin_Check {
 		$results = WP_PLUGIN_SCRIPT_DIR . $plugin_name . '-review-default.php';
 		$phpcs   = WP_PLUGIN_SCRIPT_DIR . $plugin_name . '-phpcs.txt';
 
-		$destination_zip = plugin_dir_path( __FILE__ ) . 'test-results/' . $plugin_name . '/' . $plugin_name . '.zip';
+		$destination_zip     = plugin_dir_path( __FILE__ ) . 'test-results/' . $plugin_name . '/' . $plugin_name . '.zip';
 		$destination_results = plugin_dir_path( __FILE__ ) . 'test-results/' . $plugin_name . '/' . $plugin_name . '-review-default.php';
-		$destination_phpcs = plugin_dir_path( __FILE__ ) . 'test-results/' . $plugin_name . '/' . $plugin_name . '-phpcs.txt';
+		$destination_phpcs   = plugin_dir_path( __FILE__ ) . 'test-results/' . $plugin_name . '/' . $plugin_name . '-phpcs.txt';
 
 		if ( ! file_exists( plugin_dir_path( __FILE__ ) . 'test-results/' . $plugin_name ) ) {
 
@@ -373,6 +381,8 @@ final class WP_Plugin_Check {
 
 	/**
 	 * Scan a local plugin.
+	 *
+	 * @param string $plugin_dir The plugin directory.
 	 *
 	 * @since 0.0.1
 	 */
