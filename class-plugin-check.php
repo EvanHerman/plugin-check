@@ -156,7 +156,7 @@ final class WP_Plugin_Check {
 
 			<input type="text" required name="remote-plugin-url" value="<?php echo esc_attr( $plugin_url ?? '' ); ?>" style="width: 50%;" />
 
-			<input type="checkbox" id="preserve-scan-results" name="preserve-scan-results" value="true" <?php checked( $preserve_scan_results ?? 'true', 'false' ); ?> />
+			<input type="checkbox" id="preserve-scan-results" name="preserve-scan-results" value="true" <?php checked( $preserve_scan_results, true ); ?> />
 			<label for="preserve-scan-results"><?php esc_html_e( 'Preserve Scan Results', 'plugin-check' ); ?></label>
 
 			<br />
@@ -209,7 +209,7 @@ final class WP_Plugin_Check {
 				<?php endforeach; ?>
 			</select>
 
-			<input type="checkbox" id="preserve-scan-results" name="preserve-scan-results" value="true" <?php checked( $preserve_scan_results ?? 'true', 'false' ); ?> />
+			<input type="checkbox" id="preserve-scan-results" name="preserve-scan-results" value="true" <?php checked( $preserve_scan_results, true ); ?> />
 			<label for="preserve-scan-results"><?php esc_html_e( 'Preserve Scan Results', 'plugin-check' ); ?></label>
 
 			<br />
