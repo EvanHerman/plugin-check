@@ -90,7 +90,7 @@ final class WP_Plugin_Check {
 			<h1><?php echo esc_html( get_admin_page_title() ); ?>&nbsp;<small><?php printf( 'v%s', esc_html( WP_PLUGIN_CHECK_VERSION ) ); ?></small></h1>
 
 			<p class="description"><?php esc_html_e( 'Scan a plugin for various checks when developing a WordPress plugin for the WordPress.org repository.', 'plugin-check' ); ?></p>
-			<p class="description"><strong><?php esc_html_e( 'Note:', 'plugin-check' ); ?></strong> <?php echo esc_html_e( 'This does not, cannot, scan for everything. What it does is provide an overview look into the code and outputs in a manner easy to return to a developer.', 'plugin-check' ); ?></p>
+			<p class="description"><strong><?php esc_html_e( 'Note:', 'plugin-check' ); ?></strong> <?php esc_html_e( 'This does not, cannot, scan for everything. What it does is provide an overview look into the code and outputs in a manner easy to return to a developer.', 'plugin-check' ); ?></p>
 			<p class="description">
 			<?php
 			printf(
