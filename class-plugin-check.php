@@ -21,6 +21,8 @@ final class WP_Plugin_Check {
 
 	public $scan_results;
 
+	public $phpcs_results;
+
 	/**
 	 * Class constructor.
 	 *
@@ -169,11 +171,7 @@ final class WP_Plugin_Check {
 
 		<?php
 
-		if ( isset( $this->scan_results ) ) {
-
-			$this->show_scan_results();
-
-		}
+		$this->show_test_results();
 
 	}
 
@@ -222,11 +220,7 @@ final class WP_Plugin_Check {
 
 		<?php
 
-		if ( isset( $this->scan_results ) ) {
-
-			$this->show_scan_results();
-
-		}
+		$this->show_test_results();
 
 	}
 
@@ -235,7 +229,7 @@ final class WP_Plugin_Check {
 	 *
 	 * @since 0.0.1
 	 */
-	public function show_scan_results() {
+	public function show_test_results() {
 
 		wp_enqueue_script(
 			'scan-results',
@@ -260,12 +254,27 @@ final class WP_Plugin_Check {
 		wp_enqueue_script( 'wp-theme-plugin-editor' );
 		wp_enqueue_style( 'wp-codemirror' );
 
-		printf(
-			'<h2>%s</h2>',
-			esc_html__( 'Scan Results', 'plugin-check' )
-		);
+		if ( isset( $this->scan_results ) ) {
 
-		echo '<textarea style="height: 100%;" class="scan-results widefat">' . esc_textarea( $this->scan_results ) . '</textarea>';
+			printf(
+				'<h2>%s</h2>',
+				esc_html__( 'Scan Results', 'plugin-check' )
+			);
+
+			echo '<textarea style="height: 100%;" class="scan-results widefat">' . esc_textarea( $this->scan_results ) . '</textarea>';
+
+		}
+
+		if ( isset( $this->phpcs_results ) ) {
+
+			printf(
+				'<h2>%s</h2>',
+				esc_html__( 'PHPCS Results', 'plugin-check' )
+			);
+
+			echo '<textarea style="height: 100%;" class="phpcs-results widefat">' . esc_textarea( $this->phpcs_results ) . '</textarea>';
+
+		}
 
 	}
 
@@ -364,19 +373,29 @@ final class WP_Plugin_Check {
 		rename( $results, $destination_results );
 		rename( $phpcs, $destination_phpcs );
 
-		if ( ! file_exists( $destination_results ) ) {
+		if ( file_exists( $destination_results ) ) {
 
-			$this->print_notice( __( 'Test results file not found.', 'plugin-check' ), 'error' );
-
-			return;
+			$this->scan_results = file_get_contents( $destination_results );
 
 		}
 
-		$this->scan_results = file_get_contents( $destination_results );
+		if ( file_exists( $destination_phpcs ) ) {
+
+			$this->phpcs_results = file_get_contents( $destination_phpcs );
+
+		}
 
 		if ( ! filter_input( INPUT_POST, 'preserve-scan-results', FILTER_VALIDATE_BOOLEAN ) ) {
 
 			$this->remove_directory( plugin_dir_path( __FILE__ ) . 'test-results/' . $plugin_name );
+
+		}
+
+		if ( ! file_exists( $destination_results ) && ! file_exists( $destination_phpcs ) ) {
+
+			$this->print_notice( __( 'Test results not found.', 'plugin-check' ), 'error' );
+
+			return;
 
 		}
 
@@ -444,20 +463,31 @@ final class WP_Plugin_Check {
 		$plugin_base = str_replace( '.zip', '', basename( $zip_destination ) );
 
 		$results = dirname( $zip_destination ) . '/' . $plugin_base . '-review-default.php';
+		$phpcs   = dirname( $zip_destination ) . '/' . $plugin_base . '-phpcs.txt';
 
-		if ( ! file_exists( $results ) ) {
+		if ( file_exists( $results ) ) {
 
-			$this->print_notice( __( 'Test results file not found.', 'plugin-check' ), 'error' );
-
-			return;
+			$this->scan_results = file_get_contents( $results );
 
 		}
 
-		$this->scan_results = file_get_contents( $results );
+		if ( file_exists( $phpcs ) ) {
+
+			$this->phpcs_results = file_get_contents( $phpcs );
+
+		}
 
 		if ( ! filter_input( INPUT_POST, 'preserve-scan-results', FILTER_VALIDATE_BOOLEAN ) ) {
 
 			$this->remove_directory( dirname( $zip_destination ) );
+
+		}
+
+		if ( ! $this->scan_results && ! $this->phpcs_results ) {
+
+			$this->print_notice( __( 'Test results not found.', 'plugin-check' ), 'error' );
+
+			return;
 
 		}
 
