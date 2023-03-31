@@ -337,6 +337,8 @@ final class WP_Plugin_Check {
 
 		chdir( WP_PLUGIN_SCRIPT_DIR );
 
+		// When this runs in shell_exec, the path does not match the system path, so we need to set it...
+		putenv( 'PATH=/usr/local/bin:/usr/bin:~/wpcs/vendor/bin' );
 		$output = shell_exec( "./plugin-scan.sh {$plugin_url}" );
 
 		chdir( $old_path );
@@ -433,6 +435,8 @@ final class WP_Plugin_Check {
 
 		chdir( WP_PLUGIN_SCRIPT_DIR );
 
+		// When this runs in shell_exec, the path does not match the system path, so we need to set it...
+		putenv( 'PATH=/usr/local/bin:/usr/bin:~/wpcs/vendor/bin' );
 		$output = shell_exec( "./plugin-scan.sh {$zip_destination}" );
 
 		chdir( $old_path );
