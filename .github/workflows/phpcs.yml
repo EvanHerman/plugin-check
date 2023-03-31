@@ -16,5 +16,5 @@ jobs:
       - name: Composer Install
         run: composer install --prefer-dist --optimize-autoloader
 
-      - name: Install dependencies
+      - name: Run PHPCS
         run: composer lint
