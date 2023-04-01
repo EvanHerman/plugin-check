@@ -1,5 +1,5 @@
 <?php
-/*
+/**
  * Plugin Name: Plugin Check
  * Description: Scan a plugin for various checks when developing a WordPress plugin for the WordPress.org repository.
  * Version: 0.0.3
@@ -17,10 +17,11 @@
  *
  * @package WP_Plugin_Check
  */
-
 final class WP_Plugin_Check {
 
 	public $scan_results;
+
+	public $phpcs_results;
 
 	/**
 	 * Class constructor.
@@ -81,37 +82,41 @@ final class WP_Plugin_Check {
 			true
 		);
 
-		$default_tab = null;
-		$tab         = isset( $_GET['tab'] ) ? htmlspecialchars( $_GET['tab'] ) : $default_tab;
+		$tab = filter_input( INPUT_GET, 'tab' );
+		$tab = $tab ? htmlspecialchars( $tab ) : null;
 
 		?>
 
 		<div class="wrap">
 
-			<h1><?php echo esc_html( get_admin_page_title() ); ?>&nbsp;<small><?php printf( 'v%s', WP_PLUGIN_CHECK_VERSION ); ?></small></h1>
+			<h1><?php echo esc_html( get_admin_page_title() ); ?>&nbsp;<small><?php printf( 'v%s', esc_html( WP_PLUGIN_CHECK_VERSION ) ); ?></small></h1>
 
 			<p class="description"><?php esc_html_e( 'Scan a plugin for various checks when developing a WordPress plugin for the WordPress.org repository.', 'plugin-check' ); ?></p>
-			<p class="description"><strong><?php esc_html_e( 'Note:', 'plugin-check' ); ?></strong> <?php echo esc_html_e( 'This does not, cannot, scan for everything. What it does is provide an overview look into the code and outputs in a manner easy to return to a developer.', 'plugin-check' ); ?></p>
+			<p class="description"><strong><?php esc_html_e( 'Note:', 'plugin-check' ); ?></strong> <?php esc_html_e( 'This does not, cannot, scan for everything. What it does is provide an overview look into the code and outputs in a manner easy to return to a developer.', 'plugin-check' ); ?></p>
 			<p class="description">
 			<?php
-			wp_kses_post(
-				printf(
-					/* translators: %s: link to the plugin guidelines */
-					__( 'When in doubt, please read the <a href="%s" target="_blank" title="WordPress.org Plugin Guidelines">Plugin Guidelines</a> thoroughly before submitting your plugin to the WordPress.org repository. If you still require assistance, you can contact the plugin team via Slack in #pluginreview.', 'plugin-check' ),
-					'https://developer.wordpress.org/plugins/wordpress-org/detailed-plugin-guidelines/'
+			printf(
+				/* translators: %1$s is a link with text "Google" and URL google.com */
+				esc_html__( 'When in doubt, please read the %s thoroughly before submitting your plugin to the WordPress.org repository. If you still require assistance, you can contact the plugin team via Slack in #pluginreview.', 'example-domain' ),
+				wp_kses_post(
+					sprintf(
+						'<a href="https://developer.wordpress.org/plugins/wordpress-org/detailed-plugin-guidelines/" target="_blank" title="%1$s">%2$s</a>',
+						esc_attr__( 'WordPress.org Detailed Plugin Guidelines', 'plugin-check' ),
+						esc_html__( 'Plugin Guidelines', 'plugin-check' )
+					)
 				)
 			);
 			?>
 			</p>
 
 			<nav class="nav-tab-wrapper">
-				<a href="?page=plugin-check" class="nav-tab <?php if($tab===null):?>nav-tab-active<?php endif; ?>"><?php esc_html_e( 'Local Plugin', 'plugin-check' ); ?></a>
-				<a href="?page=plugin-check&tab=remote-plugin" class="nav-tab<?php if ( 'remote-plugin' === $tab ) {?> nav-tab-active<?php } ?>"><?php esc_html_e( 'Remote Plugin', 'plugin-check' ); ?></a>
+				<a href="?page=plugin-check" class="nav-tab <?php if ( null === $tab ) : ?>nav-tab-active<?php endif; ?>"><?php esc_html_e( 'Local Plugin', 'plugin-check' ); ?></a>
+				<a href="?page=plugin-check&tab=remote-plugin" class="nav-tab<?php if ( 'remote-plugin' === $tab ) : ?> nav-tab-active<?php endif; ?>"><?php esc_html_e( 'Remote Plugin', 'plugin-check' ); ?></a>
 			</nav>
 
 			<div class="tab-content">
 			<?php
-				switch($tab) :
+			switch ( $tab ) :
 				case 'remote-plugin':
 					$this->remote_plugins_tab();
 					break;
@@ -134,9 +139,10 @@ final class WP_Plugin_Check {
 	 */
 	private function remote_plugins_tab() {
 
-		if ( isset( $_POST['remote-plugin-url'] ) ) {
+		$plugin_url            = filter_input( INPUT_POST, 'remote-plugin-url', FILTER_SANITIZE_URL );
+		$preserve_scan_results = filter_input( INPUT_POST, 'preserve-scan-results', FILTER_VALIDATE_BOOLEAN );
 
-			$plugin_url = filter_input( INPUT_POST, 'remote-plugin-url', FILTER_SANITIZE_URL );
+		if ( $plugin_url ) {
 
 			$this->scan_remote_plugin( $plugin_url );
 
@@ -152,7 +158,7 @@ final class WP_Plugin_Check {
 
 			<input type="text" required name="remote-plugin-url" value="<?php echo esc_attr( $plugin_url ?? '' ); ?>" style="width: 50%;" />
 
-			<input type="checkbox" id="preserve-scan-results" name="preserve-scan-results" value="true" <?php checked( $_POST['preserve-scan-results'] ?? 'false', 'true' ); ?> />
+			<input type="checkbox" id="preserve-scan-results" name="preserve-scan-results" value="true" <?php checked( $preserve_scan_results, true ); ?> />
 			<label for="preserve-scan-results"><?php esc_html_e( 'Preserve Scan Results', 'plugin-check' ); ?></label>
 
 			<br />
@@ -165,11 +171,7 @@ final class WP_Plugin_Check {
 
 		<?php
 
-		if ( isset( $this->scan_results ) ) {
-
-			$this->show_scan_results();
-
-		}
+		$this->show_test_results();
 
 	}
 
@@ -180,11 +182,12 @@ final class WP_Plugin_Check {
 	 */
 	private function local_plugins_tab() {
 
-		$checked_plugin = '';
+		$checked_plugin        = filter_input( INPUT_POST, 'plugin-to-check' );
+		$preserve_scan_results = filter_input( INPUT_POST, 'preserve-scan-results', FILTER_VALIDATE_BOOLEAN );
 
-		if ( isset( $_POST['plugin-to-check'] ) ) {
+		if ( $checked_plugin ) {
 
-			$checked_plugin = htmlspecialchars( $_POST['plugin-to-check'] );
+			$checked_plugin = htmlspecialchars( $checked_plugin );
 
 			$this->scan_local_plugin( $checked_plugin );
 
@@ -200,11 +203,11 @@ final class WP_Plugin_Check {
 
 			<select name="plugin-to-check">
 				<?php foreach ( $this->get_plugins() as $plugin_path => $name ) : ?>
-					<option value="<?php echo esc_attr( $plugin_path ); ?>" <?php selected( $checked_plugin, $plugin_path ); ?>><?php echo esc_html( $name ); ?></option>
+					<option value="<?php echo esc_attr( $plugin_path ); ?>" <?php selected( $checked_plugin ?? '', $plugin_path ); ?>><?php echo esc_html( $name ); ?></option>
 				<?php endforeach; ?>
 			</select>
 
-			<input type="checkbox" id="preserve-scan-results" name="preserve-scan-results" value="true" <?php checked( $_POST['preserve-scan-results'] ?? 'false', 'true' ); ?> />
+			<input type="checkbox" id="preserve-scan-results" name="preserve-scan-results" value="true" <?php checked( $preserve_scan_results, true ); ?> />
 			<label for="preserve-scan-results"><?php esc_html_e( 'Preserve Scan Results', 'plugin-check' ); ?></label>
 
 			<br />
@@ -217,11 +220,7 @@ final class WP_Plugin_Check {
 
 		<?php
 
-		if ( isset( $this->scan_results ) ) {
-
-			$this->show_scan_results();
-
-		}
+		$this->show_test_results();
 
 	}
 
@@ -230,7 +229,7 @@ final class WP_Plugin_Check {
 	 *
 	 * @since 0.0.1
 	 */
-	public function show_scan_results() {
+	public function show_test_results() {
 
 		wp_enqueue_script(
 			'scan-results',
@@ -246,21 +245,85 @@ final class WP_Plugin_Check {
 			array(
 				'codeEditor' => wp_enqueue_code_editor(
 					array(
-						'type' => 'text/css'
+						'type' => 'text/*',
 					)
-				)
+				),
 			)
 		);
 
 		wp_enqueue_script( 'wp-theme-plugin-editor' );
 		wp_enqueue_style( 'wp-codemirror' );
 
-		printf(
-			'<h2>%s</h2>',
-			esc_html__( 'Scan Results', 'plugin-check')
-		);
+		if ( isset( $this->scan_results ) && isset( $this->phpcs_results ) ) {
 
-		echo '<textarea style="height: 100%;" class="scan-results widefat">' . esc_textarea( $this->scan_results ) . '</textarea>';
+			printf(
+				'<div class="scan-results-tab tab">
+					<button class="tablinks active" onclick="openTab( event, \'scan-results\' )">%1$s</button>
+					<button class="tablinks" onclick="openTab( event, \'phpcs-results\' )">%2$s</button>
+				</div>',
+				esc_html__( 'Scan Results', 'plugin-check' ),
+				esc_html__( 'PHPCS Results', 'plugin-check' )
+			);
+
+		}
+
+		if ( isset( $this->scan_results ) ) {
+
+			printf(
+				'<div id="scan-results" class="tabcontent active">
+					<h2>%1$s</h2>
+					<textarea class="scan-results widefat">%2$s</textarea>
+				</div>',
+				esc_html__( 'Scan Results', 'plugin-check' ),
+				// Remove the '-e ' output from the run script.
+				esc_textarea( str_replace( '-e ', '', $this->scan_results ) )
+			);
+
+		}
+
+		if ( isset( $this->phpcs_results ) ) {
+
+			wp_enqueue_style(
+				'scan-results',
+				plugins_url( 'includes/css/scan-results.css', __FILE__ ),
+				array(),
+				WP_PLUGIN_CHECK_VERSION,
+				'all'
+			);
+
+			$ansi_to_html_composer_autoload_path = __DIR__ . '/vendor/autoload.php';
+
+			// Load the ANSI to HTML converter.
+			if ( ! file_exists( $ansi_to_html_composer_autoload_path ) ) {
+				$this->print_notice( __( 'An error occurred while rendering the PHPCS results.', 'plugin-check' ), 'error' );
+
+				return new WP_Error(
+					'missing_vendor_package',
+					"ANSI to HTML vendor package is missing. (Composer autoload file {$ansi_to_html_composer_autoload_path} does not exist.)"
+				);
+			}
+
+			if ( false === ( include $ansi_to_html_composer_autoload_path ) ) {
+				$this->print_notice( __( 'An error occurred while rendering the PHPCS results.', 'plugin-check' ), 'error' );
+
+				return new WP_Error(
+					'error_vendor_package',
+					"An error occured while including ANSI to HTML autoload file. ({$ansi_to_html_composer_autoload_path})"
+				);
+			}
+
+			$highlighter = new \AnsiEscapesToHtml\Highlighter();
+
+			printf(
+				'<div id="phpcs-results" class="tabcontent">
+					<h2>%1$s</h2>
+					<div class="phpcs-results widefat">%2$s</div>
+				</div>',
+				esc_html__( 'PHPCS Results', 'plugin-check' ),
+				wp_kses_post( $highlighter->toHtml( $this->phpcs_results ) )
+			);
+
+		}
 
 	}
 
@@ -285,6 +348,8 @@ final class WP_Plugin_Check {
 	/**
 	 * Remove a directory and all of its contents.
 	 *
+	 * @param string $path The path to the directory to remove.
+	 *
 	 * @since 0.0.1
 	 */
 	public function remove_directory( $path ) {
@@ -299,7 +364,11 @@ final class WP_Plugin_Check {
 
 		foreach ( $files as $file ) {
 
-			is_dir( $file ) ? removeDirectory( $file ) : unlink( $file );
+			if ( '.DS_Store' === $file ) {
+				shell_exec( 'chmod 777 ' . $file );
+			}
+
+			is_dir( $file ) ? $this->remove_directory( $file ) : unlink( $file );
 
 		}
 
@@ -309,6 +378,8 @@ final class WP_Plugin_Check {
 
 	/**
 	 * Scan a remote plugin.
+	 *
+	 * @param string $plugin_url The URL to the plugin .zip.
 	 *
 	 * @since 0.0.1
 	 */
@@ -328,6 +399,8 @@ final class WP_Plugin_Check {
 
 		chdir( WP_PLUGIN_SCRIPT_DIR );
 
+		// When this runs in shell_exec, the path does not match the system path, so we need to set it...
+		putenv( sprintf( 'PATH=%s', $this->get_env_path() ) );
 		$output = shell_exec( "./plugin-scan.sh {$plugin_url}" );
 
 		chdir( $old_path );
@@ -338,9 +411,9 @@ final class WP_Plugin_Check {
 		$results = WP_PLUGIN_SCRIPT_DIR . $plugin_name . '-review-default.php';
 		$phpcs   = WP_PLUGIN_SCRIPT_DIR . $plugin_name . '-phpcs.txt';
 
-		$destination_zip = plugin_dir_path( __FILE__ ) . 'test-results/' . $plugin_name . '/' . $plugin_name . '.zip';
+		$destination_zip     = plugin_dir_path( __FILE__ ) . 'test-results/' . $plugin_name . '/' . $plugin_name . '.zip';
 		$destination_results = plugin_dir_path( __FILE__ ) . 'test-results/' . $plugin_name . '/' . $plugin_name . '-review-default.php';
-		$destination_phpcs = plugin_dir_path( __FILE__ ) . 'test-results/' . $plugin_name . '/' . $plugin_name . '-phpcs.txt';
+		$destination_phpcs   = plugin_dir_path( __FILE__ ) . 'test-results/' . $plugin_name . '/' . $plugin_name . '-phpcs.txt';
 
 		if ( ! file_exists( plugin_dir_path( __FILE__ ) . 'test-results/' . $plugin_name ) ) {
 
@@ -353,15 +426,25 @@ final class WP_Plugin_Check {
 		rename( $results, $destination_results );
 		rename( $phpcs, $destination_phpcs );
 
-		if ( ! file_exists( $destination_results ) ) {
+		if ( file_exists( $destination_results ) ) {
 
-			$this->print_notice( __( 'Test results file not found.', 'plugin-check' ), 'error' );
+			$this->scan_results = file_get_contents( $destination_results );
+
+		}
+
+		if ( file_exists( $destination_phpcs ) ) {
+
+			$this->phpcs_results = file_get_contents( $destination_phpcs );
+
+		}
+
+		if ( ! file_exists( $destination_results ) && ! file_exists( $destination_phpcs ) ) {
+
+			$this->print_notice( __( 'Test results not found.', 'plugin-check' ), 'error' );
 
 			return;
 
 		}
-
-		$this->scan_results = file_get_contents( $destination_results );
 
 		if ( ! filter_input( INPUT_POST, 'preserve-scan-results', FILTER_VALIDATE_BOOLEAN ) ) {
 
@@ -369,10 +452,18 @@ final class WP_Plugin_Check {
 
 		}
 
+		if ( file_exists( WP_PLUGIN_SCRIPT_DIR . 'current_plugin' ) ) {
+
+			$this->remove_directory( WP_PLUGIN_SCRIPT_DIR . 'current_plugin' );
+
+		}
+
 	}
 
 	/**
 	 * Scan a local plugin.
+	 *
+	 * @param string $plugin_dir The plugin directory.
 	 *
 	 * @since 0.0.1
 	 */
@@ -422,6 +513,8 @@ final class WP_Plugin_Check {
 
 		chdir( WP_PLUGIN_SCRIPT_DIR );
 
+		// When this runs in shell_exec, the path does not match the system path, so we need to set it...
+		putenv( sprintf( 'PATH=%s', $this->get_env_path() ) );
 		$output = shell_exec( "./plugin-scan.sh {$zip_destination}" );
 
 		chdir( $old_path );
@@ -429,20 +522,37 @@ final class WP_Plugin_Check {
 		$plugin_base = str_replace( '.zip', '', basename( $zip_destination ) );
 
 		$results = dirname( $zip_destination ) . '/' . $plugin_base . '-review-default.php';
+		$phpcs   = dirname( $zip_destination ) . '/' . $plugin_base . '-phpcs.txt';
 
-		if ( ! file_exists( $results ) ) {
+		if ( file_exists( $results ) ) {
 
-			$this->print_notice( __( 'Test results file not found.', 'plugin-check' ), 'error' );
-
-			return;
+			$this->scan_results = file_get_contents( $results );
 
 		}
 
-		$this->scan_results = file_get_contents( $results );
+		if ( file_exists( $phpcs ) ) {
+
+			$this->phpcs_results = file_get_contents( $phpcs );
+
+		}
 
 		if ( ! filter_input( INPUT_POST, 'preserve-scan-results', FILTER_VALIDATE_BOOLEAN ) ) {
 
 			$this->remove_directory( dirname( $zip_destination ) );
+
+		}
+
+		if ( file_exists( WP_PLUGIN_SCRIPT_DIR . 'current_plugin' ) ) {
+
+			$this->remove_directory( WP_PLUGIN_SCRIPT_DIR . 'current_plugin' );
+
+		}
+
+		if ( ! $this->scan_results && ! $this->phpcs_results ) {
+
+			$this->print_notice( __( 'Test results not found.', 'plugin-check' ), 'error' );
+
+			return;
 
 		}
 
@@ -470,6 +580,23 @@ final class WP_Plugin_Check {
 			</div>',
 			esc_attr( $notice_type ),
 			esc_html( $message )
+		);
+
+	}
+
+	/**
+	 * Get the environment path
+	 */
+	private function get_env_path() {
+
+		/**
+		 * Filter the environment path used in shell_exec
+		 *
+		 * @param string $path The path to use.
+		 */
+		return apply_filters(
+			'wp_plugin_check_env_path',
+			'/usr/local/bin:/usr/bin:~/wpcs/vendor/bin'
 		);
 
 	}

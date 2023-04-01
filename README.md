@@ -6,6 +6,7 @@ The Plugin Check plugin can be used to check a plugin locally on a test site dur
 ![Plugin Check Image](https://cldup.com/5O4Gkughpa.png)
 
 ### Intentions
+
 This plugins intention is to minimize the common pitfalls and errors developers encounter when submitting plugins to WordPress.org for review.
 
 When submitting a plugin for admission into [WordPress.org](https://www.wordpress.org/plugins) there are a number of [guidelines](https://developer.wordpress.org/plugins/wordpress-org/detailed-plugin-guidelines/) that must be followed, and many developers miss steps or checks that prolong the review process over multiple days.
@@ -14,7 +15,24 @@ Developing a plugin in tandem with Plugin Check will allow developers to periodi
 
 Developers should use this plugin during development to check for any errors in their code, or, at the very least, use Plugin Check to scan their plugin before submitting it for review on [WordPress.org](https://www.wordpress.org/plugins).
 
+### Caveats
+
+- Plugin Check currently only works on Mac OS.
+- Plugin Check requires that your WPCS is installed at ~/wpcs/.
+
+### Installation & Usage
+
+- Download the latest release of Plugin Check (`plugin-check.zip`) from the [releases](https://github.com/EvanHerman/plugin-check/releases).
+- Login to your WordPress website and go to 'Plugins > Add New'.
+- At the top of the page, click on 'Upload Plugin'.
+- Select the `plugin-check.zip` file you downloaded in step 1.
+- Activate Plugin Check.
+- Navigate to 'Tools > Plugin Check'.
+- Select your plugin from the dropdown list and click 'Check Plugin'.
+- Or to check a remote plugin, click on the 'Remote Plugin' tab and enter the URL of the remote location where your plugin is.
+
 ### Ignored Files When Scanning
+
 If this plugin is used during development, there may be many files in the working copy of your plugin. Plugin Check works by zipping up your local plugin directory, and then scanning that against a set of rules. Some files might get included in the .zip that shouldn't be, so Plugin Check does it's best to exclude a default set of files that are generally used during development that will throw an error during plugin scans.
 
 The following files *will not* be included in the .zip that is scanned.
@@ -47,17 +65,6 @@ The following files *will not* be included in the .zip that is scanned.
 - `phpunit.xml.dist`
 - `webpack.config.js`
 - `yarn.lock`
-
-### Installation & Usage
-
-- Download the latest release of Plugin Check (`plugin-check.zip`) from the [releases](https://github.com/EvanHerman/plugin-check/releases).
-- Login to your WordPress website and go to 'Plugins > Add New'.
-- At the top of the page, click on 'Upload Plugin'.
-- Select the `plugin-check.zip` file you downloaded in step 1.
-- Activate Plugin Check.
-- Navigate to 'Tools > Plugin Check'.
-- Select your plugin from the dropdown list and click 'Check Plugin'.
-- Or to check a remote plugin, click on the 'Remote Plugin' tab and enter the URL of the remote location where your plugin is.
 
 ### Development
 

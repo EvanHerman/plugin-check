@@ -10,6 +10,11 @@ final class WP_Plugin_Check_Zip_Plugin {
 	/**
 	 * Class constructor.
 	 *
+	 * @param string $source      The source directory to zip.
+	 * @param string $destination The destination of the zip file.
+	 * @param bool   $include_dir Whether to include the source directory in the zip file.
+	 * @param array  $exclusions  List of files to exclude from the zip file.
+	 *
 	 * @since 0.0.1
 	 */
 	public function __construct( $source, $destination, $include_dir = false, $exclusions = array() ) {
@@ -72,7 +77,7 @@ final class WP_Plugin_Check_Zip_Plugin {
 	 */
 	public function zip_plugin( $source, $destination, $include_dir = false, $exclusions = array() ) {
 
-		// Remove existing archive
+		// Remove existing archive.
 		if ( file_exists( $destination ) ) {
 
 			unlink( $destination );
@@ -104,11 +109,12 @@ final class WP_Plugin_Check_Zip_Plugin {
 
 			if ( $include_dir ) {
 
-				$arr     = explode( "/",$source );
-				$maindir = $arr[ count( $arr ) - 1 ];
-				$source  = "";
+				$arr       = explode( '/', $source );
+				$maindir   = $arr[ count( $arr ) - 1 ];
+				$source    = '';
+				$arr_count = count( $arr ) - 1;
 
-				for ( $i=0; $i < count($arr) - 1; $i++ ) {
+				for ( $i = 0; $i < $arr_count; $i++ ) {
 
 					$source .= '/' . $arr[ $i ];
 
@@ -124,7 +130,7 @@ final class WP_Plugin_Check_Zip_Plugin {
 				// Ignore "." and ".." folders.
 				$file = str_replace( '\\', '/', $file );
 
-				if( in_array( substr( $file, strrpos( $file, '/' ) +1 ), array( '.', '..' ) ) ) {
+				if ( in_array( substr( $file, strrpos( $file, '/' ) + 1 ), array( '.', '..' ), true ) ) {
 
 					continue;
 
@@ -145,13 +151,13 @@ final class WP_Plugin_Check_Zip_Plugin {
 
 				} elseif ( is_file( $file ) === true ) {
 
-					$zip->addFromString(str_replace($source . '/', '', $file), file_get_contents($file));
+					$zip->addFromString( str_replace( $source . '/', '', $file ), file_get_contents( $file ) );
 
 				}
 			}
-		} elseif (is_file($source) === true){
+		} elseif ( is_file( $source ) === true ) {
 
-			$zip->addFromString(basename($source), file_get_contents($source));
+			$zip->addFromString( basename( $source ), file_get_contents( $source ) );
 
 		}
 
