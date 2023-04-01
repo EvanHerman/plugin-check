@@ -261,8 +261,8 @@ final class WP_Plugin_Check {
 					<button class="tablinks active" onclick="openTab( event, \'scan-results\' )">%1$s</button>
 					<button class="tablinks" onclick="openTab( event, \'phpcs-results\' )">%2$s</button>
 				</div>',
-				esc_html( 'Scan Results', 'plugin-check' ),
-				esc_html( 'PHPCS Results', 'plugin-check')
+				esc_html__( 'Scan Results', 'plugin-check' ),
+				esc_html__( 'PHPCS Results', 'plugin-check' )
 			);
 
 		}
@@ -291,22 +291,24 @@ final class WP_Plugin_Check {
 				'all'
 			);
 
+			$ansi_to_html_composer_autoload_path = __DIR__ . '/vendor/autoload.php';
+
 			// Load the ANSI to HTML converter.
-			if ( ! file_exists( $sComposerAutoloadPath = __DIR__ . '/vendor/autoload.php' ) ) {
+			if ( ! file_exists( $ansi_to_html_composer_autoload_path ) ) {
 				$this->print_notice( __( 'An error occurred while rendering the PHPCS results.', 'plugin-check' ), 'error' );
 
 				return new WP_Error(
 					'missing_vendor_package',
-					"ANSI to HTML vendor package is missing. (Composer autoload file {$sComposerAutoloadPath} does not exist.)"
+					"ANSI to HTML vendor package is missing. (Composer autoload file {$ansi_to_html_composer_autoload_path} does not exist.)"
 				);
 			}
-	
-			if ( false === ( include $sComposerAutoloadPath ) ) {
+
+			if ( false === ( include $ansi_to_html_composer_autoload_path ) ) {
 				$this->print_notice( __( 'An error occurred while rendering the PHPCS results.', 'plugin-check' ), 'error' );
 
 				return new WP_Error(
 					'error_vendor_package',
-					"An error occured while including ANSI to HTML autoload file. ({$sComposerAutoloadPath})"
+					"An error occured while including ANSI to HTML autoload file. ({$ansi_to_html_composer_autoload_path})"
 				);
 			}
 
@@ -318,7 +320,7 @@ final class WP_Plugin_Check {
 					<div class="phpcs-results widefat">%2$s</div>
 				</div>',
 				esc_html__( 'PHPCS Results', 'plugin-check' ),
-				$highlighter->toHtml( esc_html( $this->phpcs_results ) )
+				wp_kses_post( $highlighter->toHtml( $this->phpcs_results ) )
 			);
 
 		}
@@ -359,10 +361,6 @@ final class WP_Plugin_Check {
 		}
 
 		$files = glob( $path . '/*' );
-
-		if ( file_exists( $path . '/.DS_Store' ) ) {
-			
-		}
 
 		foreach ( $files as $file ) {
 
