@@ -21,6 +21,11 @@ rm -rf build/plugin-check/test-results/*
 rm -f build/plugin-check/bin/*.sh
 rm -f build/plugin-check/**/.DS_Store
 
+# Remove the PHPCS line so we can replace it
+sed -i '1343d' 'build/plugin-check/bin/plugin-scan/plugin-scan.sh'
+sed -i '1343i\
+phpcs --colors --extensions=php --report-width=200 --standard=$0.xml current_plugin --report=code >> "$tempfile"' build/plugin-check/bin/plugin-scan/plugin-scan.sh
+
 # Remove the bash check in the plugin scan (doesn't work locally for me)
 sed -i '8,14d' 'build/plugin-check/bin/plugin-scan/plugin-scan.sh'
 

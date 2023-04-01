@@ -6,6 +6,11 @@ chmod +x bin/plugin-scan/plugin-scan.sh
 chmod +x bin/plugin-scan/plugin-scan.sh.ignore
 chmod +x bin/plugin-scan/plugin-scan.sh.xml
 
+# Remove the PHPCS line so we can replace it
+sed -i '1343d' 'bin/plugin-scan/plugin-scan.sh'
+sed -i '1343i\
+phpcs --colors --extensions=php --report-width=200 --standard=$0.xml current_plugin --report=code >> "$tempfile"' bin/plugin-scan/plugin-scan.sh
+
 # Remove the bash check in the plugin scan (doesn't work locally for me)
 sed -i '8,14d' 'bin/plugin-scan/plugin-scan.sh'
 
