@@ -245,7 +245,7 @@ final class WP_Plugin_Check {
 			array(
 				'codeEditor' => wp_enqueue_code_editor(
 					array(
-						'type' => 'text/css',
+						'type' => 'text/*',
 					)
 				),
 			)
@@ -254,25 +254,72 @@ final class WP_Plugin_Check {
 		wp_enqueue_script( 'wp-theme-plugin-editor' );
 		wp_enqueue_style( 'wp-codemirror' );
 
+		if ( isset( $this->scan_results ) && isset( $this->phpcs_results ) ) {
+
+			printf(
+				'<div class="scan-results-tab tab">
+					<button class="tablinks active" onclick="openTab( event, \'scan-results\' )">%1$s</button>
+					<button class="tablinks" onclick="openTab( event, \'phpcs-results\' )">%2$s</button>
+				</div>',
+				esc_html( 'Scan Results', 'plugin-check' ),
+				esc_html( 'PHPCS Results', 'plugin-check')
+			);
+
+		}
+
 		if ( isset( $this->scan_results ) ) {
 
 			printf(
-				'<h2>%s</h2>',
-				esc_html__( 'Scan Results', 'plugin-check' )
+				'<div id="scan-results" class="tabcontent active">
+					<h2>%1$s</h2>
+					<textarea class="scan-results widefat">%2$s</textarea>
+				</div>',
+				esc_html__( 'Scan Results', 'plugin-check' ),
+				// Remove the '-e ' output from the run script.
+				esc_textarea( str_replace( '-e ', '', $this->scan_results ) )
 			);
-
-			echo '<textarea style="height: 100%;" class="scan-results widefat">' . esc_textarea( $this->scan_results ) . '</textarea>';
 
 		}
 
 		if ( isset( $this->phpcs_results ) ) {
 
-			printf(
-				'<h2>%s</h2>',
-				esc_html__( 'PHPCS Results', 'plugin-check' )
+			wp_enqueue_style(
+				'scan-results',
+				plugins_url( 'includes/css/scan-results.css', __FILE__ ),
+				array(),
+				WP_PLUGIN_CHECK_VERSION,
+				'all'
 			);
 
-			echo '<textarea style="height: 100%;" class="phpcs-results widefat">' . esc_textarea( $this->phpcs_results ) . '</textarea>';
+			// Load the ANSI to HTML converter.
+			if ( ! file_exists( $sComposerAutoloadPath = __DIR__ . '/vendor/autoload.php' ) ) {
+				$this->print_notice( __( 'An error occurred while rendering the PHPCS results.', 'plugin-check' ), 'error' );
+
+				return new WP_Error(
+					'missing_vendor_package',
+					"ANSI to HTML vendor package is missing. (Composer autoload file {$sComposerAutoloadPath} does not exist.)"
+				);
+			}
+	
+			if ( false === ( include $sComposerAutoloadPath ) ) {
+				$this->print_notice( __( 'An error occurred while rendering the PHPCS results.', 'plugin-check' ), 'error' );
+
+				return new WP_Error(
+					'error_vendor_package',
+					"An error occured while including ANSI to HTML autoload file. ({$sComposerAutoloadPath})"
+				);
+			}
+
+			$highlighter = new \AnsiEscapesToHtml\Highlighter();
+
+			printf(
+				'<div id="phpcs-results" class="tabcontent">
+					<h2>%1$s</h2>
+					<div class="phpcs-results widefat">%2$s</div>
+				</div>',
+				esc_html__( 'PHPCS Results', 'plugin-check' ),
+				$highlighter->toHtml( esc_html( $this->phpcs_results ) )
+			);
 
 		}
 
@@ -313,9 +360,17 @@ final class WP_Plugin_Check {
 
 		$files = glob( $path . '/*' );
 
+		if ( file_exists( $path . '/.DS_Store' ) ) {
+			
+		}
+
 		foreach ( $files as $file ) {
 
-			is_dir( $file ) ? removeDirectory( $file ) : unlink( $file );
+			if ( '.DS_Store' === $file ) {
+				shell_exec( 'chmod 777 ' . $file );
+			}
+
+			is_dir( $file ) ? $this->remove_directory( $file ) : unlink( $file );
 
 		}
 
@@ -385,17 +440,23 @@ final class WP_Plugin_Check {
 
 		}
 
+		if ( ! file_exists( $destination_results ) && ! file_exists( $destination_phpcs ) ) {
+
+			$this->print_notice( __( 'Test results not found.', 'plugin-check' ), 'error' );
+
+			return;
+
+		}
+
 		if ( ! filter_input( INPUT_POST, 'preserve-scan-results', FILTER_VALIDATE_BOOLEAN ) ) {
 
 			$this->remove_directory( plugin_dir_path( __FILE__ ) . 'test-results/' . $plugin_name );
 
 		}
 
-		if ( ! file_exists( $destination_results ) && ! file_exists( $destination_phpcs ) ) {
+		if ( file_exists( WP_PLUGIN_SCRIPT_DIR . 'current_plugin' ) ) {
 
-			$this->print_notice( __( 'Test results not found.', 'plugin-check' ), 'error' );
-
-			return;
+			$this->remove_directory( WP_PLUGIN_SCRIPT_DIR . 'current_plugin' );
 
 		}
 
@@ -480,6 +541,12 @@ final class WP_Plugin_Check {
 		if ( ! filter_input( INPUT_POST, 'preserve-scan-results', FILTER_VALIDATE_BOOLEAN ) ) {
 
 			$this->remove_directory( dirname( $zip_destination ) );
+
+		}
+
+		if ( file_exists( WP_PLUGIN_SCRIPT_DIR . 'current_plugin' ) ) {
+
+			$this->remove_directory( WP_PLUGIN_SCRIPT_DIR . 'current_plugin' );
 
 		}
 

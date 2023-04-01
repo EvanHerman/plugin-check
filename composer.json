@@ -12,7 +12,8 @@
 		}
 	},
 	"require": {
-		"php": ">=7.4"
+		"php": ">=7.4",
+		"neilime/ansi-escapes-to-html": "^3.0"
 	},
 	"require-dev": {
 		"dealerdirect/phpcodesniffer-composer-installer": "*",

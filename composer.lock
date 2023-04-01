@@ -4,8 +4,72 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "621b15405262ab9f4bbbcef82fe9901f",
-    "packages": [],
+    "content-hash": "52045f5439650137bef2b12831801e15",
+    "packages": [
+        {
+            "name": "neilime/ansi-escapes-to-html",
+            "version": "v3.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/neilime/ansi-escapes-to-html.git",
+                "reference": "ac0869e6c540db036d066da934b13140abb6e20a"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/neilime/ansi-escapes-to-html/zipball/ac0869e6c540db036d066da934b13140abb6e20a",
+                "reference": "ac0869e6c540db036d066da934b13140abb6e20a",
+                "shasum": ""
+            },
+            "require": {
+                "php": "^7.4 || ^8"
+            },
+            "require-dev": {
+                "pcov/clobber": "^2.0",
+                "phpstan/extension-installer": "^1.2",
+                "phpstan/phpstan": "^1.9",
+                "phpstan/phpstan-phpunit": "^1.2",
+                "phpunit/phpunit": "^9.5.26",
+                "squizlabs/php_codesniffer": "^3.7"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "AnsiEscapesToHtml\\": "src/AnsiEscapesToHtml"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Neilime",
+                    "homepage": "https://github.com/neilime",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Convert ANSI escapes (terminal formatting/color codes) to HTML",
+            "homepage": "http://neilime.github.io/ansi-escapes-to-html/",
+            "keywords": [
+                "ansi",
+                "convert",
+                "escapes",
+                "highlight",
+                "html"
+            ],
+            "support": {
+                "issues": "https://github.com/neilime/ansi-escapes-to-html/issues",
+                "source": "https://github.com/neilime/ansi-escapes-to-html/tree/v3.0.0"
+            },
+            "funding": [
+                {
+                    "url": "https://github.com/neilime",
+                    "type": "github"
+                }
+            ],
+            "time": "2022-11-22T09:00:33+00:00"
+        }
+    ],
     "packages-dev": [
         {
             "name": "dealerdirect/phpcodesniffer-composer-installer",

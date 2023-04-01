@@ -1,3 +1,4 @@
 test-results/*
 build/
 vendor/
+bin/plugin-scan/current_plugin/
